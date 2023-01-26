@@ -1,0 +1,9 @@
+.vagrant/
+.idea/
+docs/scenarios/
+docs/notes.md
+temp/
+ansible/.venv/
+ansible/collections/
+ansible/test.yml
+*VBoxHeadless*.log
