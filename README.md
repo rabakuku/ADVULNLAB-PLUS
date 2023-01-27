@@ -224,15 +224,15 @@ ansible-playbook main.yml # this will configure the vms in order to play ansible
 - If you previously install the v1 do not try to update as a lot of things have changed. Just drop your old lab and build the new one (you will not regret it)
 - Chocolatey is no more used and basic tools like git or notepad++ are no more installed by default (as chocolatey regularly crash the install due to hitting rate on multiples builds)
 - ELK is no more installed by default to save resources but you still can install it separately (see the blueteam/elk part)
-- Dragonstone vm as disappear and there is no more DC replication in the lab to save resources
-- Wintefell is now a domain controller for the subdomain north of the sevenkingdoms.local domain
+- EmpireState vm as disappear and there is no more DC replication in the lab to save resources
+- Wintefell is now a domain controller for the subdomain north of the newyork.local domain
 
 ### Space use
 - the lab take environ 77GB (but you have to get the space for the vms vagrant images windows server 2016 (22GB) / windows server 2019 (14GB) / ubuntu 18.04 (502M))
 - the total space needed for the lab is ~115 GB (and more if you take snapshots)
 
 ### Start / Setup / Run
-The default domain will be **sevenkingdoms.local**, on the subnet 192.168.56.1/24 and each machine has been allocated with 2CPU and 4GB of memory. If you want to change some of these performance settings you can modify the Vagrantfile (please note that with less RAM the install process sometimes crash, if it append just relaunch the ansible playbook).
+The default domain will be **newyork.local**, on the subnet 192.168.56.1/24 and each machine has been allocated with 2CPU and 4GB of memory. If you want to change some of these performance settings you can modify the Vagrantfile (please note that with less RAM the install process sometimes crash, if it append just relaunch the ansible playbook).
 
 To have the lab up and running this is the commands you should do:
 
@@ -267,7 +267,7 @@ ansible-playbook ad-trusts.yml    # create the trust relationships
 ansible-playbook ad-data.yml      # import the ad datas : users/groups...
 ansible-playbook servers.yml      # Install IIS and MSSQL
 ansible-playbook ad-relations.yml # set the rights and the group domains relations
-ansible-playbook adcs.yml         # Install ADCS on essos
+ansible-playbook adcs.yml         # Install ADCS on maryland
 ansible-playbook ad-acl.yml       # set the ACE/ACL
 ansible-playbook security.yml     # Configure some securities (adjust av enable/disable)
 ansible-playbook vulns.yml        # Configure some vulnerabilities
@@ -294,29 +294,29 @@ ansible-playbook main.yml
 
 - Join us on Discord : https://discord.gg/NYy7rsMf3u
 
-## LAB Content - sevenkingdoms.local / north.sevenkingdoms.local / essos.local
+## LAB Content - newyork.local / north.newyork.local / maryland.local
 
 ![v2_overview.png](./docs/img/v2_overview.png)
 
 ### Servers
 This lab is actually composed of five virtual machines:
-- **kingslanding** : DC01  running on Windows Server 2019 (with windefender enabled by default)
-- **winterfell**   : DC02  running on Windows Server 2019 (with windefender enabled by default)
-- **castelblack**  : SRV02 running on Windows Server 2019 (with windefender **disabled** by default)
-- **meereen**      : DC03  running on Windows Server 2016 (with windefender enabled by default)
-- **braavos**      : SRV03 running on Windows Server 2016 (with windefender enabled by default)
+- **NYC** : DC01  running on Windows Server 2019 (with windefender enabled by default)
+- **Bronx**   : DC02  running on Windows Server 2019 (with windefender enabled by default)
+- **Yonkers**  : SRV02 running on Windows Server 2019 (with windefender **disabled** by default)
+- **Baltimore**      : DC03  running on Windows Server 2016 (with windefender enabled by default)
+- **Salisbury**      : SRV03 running on Windows Server 2016 (with windefender enabled by default)
 
-#### domain : north.sevenkingdoms.local
-- **winterfell**     : DC01
-- **castelblack**    : SRV02 : MSSQL / IIS
+#### domain : north.newyork.local
+- **Bronx**     : DC01
+- **Yonkers**    : SRV02 : MSSQL / IIS
 
-#### domain : sevenkingdoms.local
-- **kingslanding**   : DC02
+#### domain : newyork.local
+- **NYC**   : DC02
 - **castelrock**     : SRV01 (disabled due to resources reasons)
 
-#### domain : essos.local
-- **braavos**        : DC03
-- **meeren**         : SRV03 : MSSQL / ADCS
+#### domain : maryland.local
+- **Salisbury**        : DC03
+- **Baltimore**         : SRV03 : MSSQL / ADCS
 
 
 The lab setup is automated using vagrant and ansible automation tools.
@@ -374,94 +374,94 @@ ansible-playbook elk.yml
 
 - You can find a lot of the available scenarios on [https://mayfly277.github.io/categories/ad/](https://mayfly277.github.io/categories/ad/)
 
-NORTH.SEVENKINGDOMS.LOCAL
-- STARKS:              RDP on WINTERFELL AND CASTELBLACK
-  - arya.stark:        Execute as user on mssql
-  - eddard.stark:      DOMAIN ADMIN NORTH/ (bot 5min) LLMRN request to do NTLM relay with responder
-  - catelyn.stark:     
-  - robb.stark:        bot (3min) RESPONDER LLMR
-  - sansa.stark:       
-  - brandon.stark:     ASREP_ROASTING
-  - rickon.stark:      
+NORTH.newyork.LOCAL
+- NorthS:              RDP on Bronx AND Yonkers
+  - pablo.sandoval:        Execute as user on mssql
+  - fernando.alonzo:      DOMAIN ADMIN NORTH/ (bot 5min) LLMRN request to do NTLM relay with responder
+  - fernando.alonzo:     
+  - matias.Almonte:        bot (3min) RESPONDER LLMR
+  - alejandro.Rodriguez:       
+  -  claudio.ortiz:     ASREP_ROASTING
+  - salvador.aguilar:      
   - theon.greyjoy:
-  - jon.snow:          mssql admin / KERBEROASTING / group cross domain / mssql trusted link
-  - hodor:             PASSWORD SPRAY (user=password)
-- NIGHT WATCH:         RDP on CASTELBLACK
-  - samwell.tarly:     Password in ldap description / mssql execute as login
-                       GPO abuse (Edit Settings on "STARKWALLPAPER" GPO)
-  - jon.snow:          (see starks)
-  - jeor.mormont:      (see mormont)
-- MORMONT:             RDP on CASTELBLACK
-  - jeor.mormont:      ACL writedacl-writeowner on group Night Watch
-- AcrossTheSea :       cross forest group
+  - elena.lopez:          mssql admin / KERBEROASTING / group cross domain / mssql trusted link
+  - pacofish:             PASSWORD SPRAY (user=password)
+- Patrol:         RDP on Yonkers
+  - miguel.cabrera:     Password in ldap description / mssql execute as login
+                       GPO abuse (Edit Settings on "NorthWALLPAPER" GPO)
+  - elena.lopez:          (see Norths)
+  - joel.exposito:      (see NorthManager)
+- NorthManager:             RDP on Yonkers
+  - joel.exposito:      ACL writedacl-writeowner on group Patrol
+- NorthMultiDom :       cross forest group
 
-SEVENKINGDOMS.LOCAL
+newyork.LOCAL
 - LANISTERS
-  - tywin.lannister:   ACL forcechangepassword on jaime.lanister
-  - jaime.lannister:   ACL genericwrite-on-user joffrey.baratheon
-  - tyron.lannister:   ACL self-self-membership-on-group Small Council
-  - cersei.lannister:  DOMAIN ADMIN SEVENKINGDOMS
-- BARATHEON:           RDP on KINGSLANDING
-  - robert.baratheon:  DOMAIN ADMIN SEVENKINGDOMS
-  - joffrey.baratheon: ACL Write DACL on tyron.lannister
-  - renly.baratheon:
-  - stannis.baratheon: ACL genericall-on-computer kingslanding / ACL writeproperty-self-membership Domain Admins
-- SMALL COUNCIL :      ACL add Member to group dragon stone / RDP on KINGSLANDING
-  - petyer.baelish:    ACL writeproperty-on-group Domain Admins
-  - lord.varys:        ACL genericall-on-group Domain Admins / Acrossthenarrossea
-  - maester.pycelle:   ACL write owner on group Domain Admins
-- DRAGONSTONE :        ACL Write Owner on KINGSGUARD
-- KINGSGUARD :         ACL generic all on user stannis.baratheon
+  - Donald.Trump:   ACL forcechangepassword on jaime.lanister
+  - hugo.Chavez:   ACL genericwrite-on-user ramon.Maldonado
+  - nicolas.Maduro:   ACL self-self-membership-on-group RadioCity
+  - mateo.Pacheco:  DOMAIN ADMIN newyork
+- Rockefeller:           RDP on NYC
+  - marco.Lopez:  DOMAIN ADMIN newyork
+  - ramon.Maldonado: ACL Write DACL on nicolas.Maduro
+  - rafael.Smith:
+  - diego.Montenegro: ACL genericall-on-computer NYC / ACL writeproperty-self-membership Domain Admins
+- RadioCity :      ACL add Member to group dragon stone / RDP on NYC
+  - lorenzo.cruz:    ACL writeproperty-on-group Domain Admins
+  - jesus.puello:        ACL genericall-on-group Domain Admins / Acrossthenarrossea
+  - martin.Osuna:   ACL write owner on group Domain Admins
+- EmpireState :        ACL Write Owner on CentralPark
+- CentralPark :         ACL generic all on user diego.Montenegro
 - AccorsTheNarrowSea:       cross forest group
 
-ESSOS.LOCAL
+maryland.LOCAL
 - TARGERYEN
-  - daenerys.targaryen: DOMAIN ADMIN ESSOS
-  - viserys.targaryen:  
-  - jorah.mormont:      mssql execute as login / mssql trusted link / Read LAPS Password
-- DOTHRAKI
-  - khal.drogo:         mssql admin / GenericAll on viserys (shadow credentials) / GenericAll on ECS4
-- DragonsFriends:       cross forest group
-- Spys:                 cross forest group / Read LAPS password  / ACL generic all jorah.mormont
+  - carmelo.Anthony: DOMAIN ADMIN maryland
+  - marisol.Pedrosa:  
+  - teresa.Perez:      mssql execute as login / mssql trusted link / Read LAPS Password
+- Hartford
+  - joaquin.Pereida:         mssql admin / GenericAll on viserys (shadow credentials) / GenericAll on ECS4
+- LocalAdmin:       cross forest group
+- KGB:                 cross forest group / Read LAPS password  / ACL generic all teresa.Perez
 
 ### Computers Users and group permissions
 
-- SEVENKINGDOMS
-  - DC01 : kingslanding.sevenkingdoms.local (Windows Server 2019) (SEVENKINGDOMS DC)
-    - Admins : robert.baratheon (U), cersei.lannister (U)
-    - RDP: Small Council (G)
+- newyork
+  - DC01 : NYC.newyork.local (Windows Server 2019) (newyork DC)
+    - Admins : marco.Lopez (U), mateo.Pacheco (U)
+    - RDP: RadioCity (G)
 
 - NORTH
-  - DC02 : winterfell.north.sevenkingdoms.local (Windows Server 2019) (NORTH DC)
-    - Admins : eddard.stark (U), catelyn.stark (U), robb.stark (U)
-    - RDP: Stark(G)
+  - DC02 : Bronx.north.newyork.local (Windows Server 2019) (NORTH DC)
+    - Admins : fernando.alonzo (U), fernando.alonzo (U), matias.Almonte (U)
+    - RDP: North(G)
 
-  - SRV02 : castelblack.essos.local (Windows Server 2019) (IIS, MSSQL, SMB share)
-    - Admins: jeor.mormont (U)
-    - RDP: Night Watch (G), Mormont (G), Stark (G)
+  - SRV02 : Yonkers.maryland.local (Windows Server 2019) (IIS, MSSQL, SMB share)
+    - Admins: joel.exposito (U)
+    - RDP: Patrol (G), NorthManager (G), North (G)
     - IIS : allow asp upload, run as NT Authority/network
     - MSSQL:
-      - admin : jon.snow
+      - admin : elena.lopez
       - impersonate : 
         - execute as login : samwel.tarlly -> sa
-        - execute as user : arya.stark -> dbo
+        - execute as user : pablo.sandoval -> dbo
       - link :
-        - to braavos : jon.snow -> sa
+        - to Salisbury : elena.lopez -> sa
 
-- ESSOS
-  - DC03  : meereen.essos.local (Windows Server 2016) (ESSOS DC)
-    - Admins: daenerys.targaryen (U)
-    - RDP: Targaryen (G)
+- maryland
+  - DC03  : Baltimore.maryland.local (Windows Server 2016) (maryland DC)
+    - Admins: carmelo.Anthony (U)
+    - RDP: Cecil (G)
 
-  - SRV03 : braavos.essos.local (Windows Server 2016) (MSSQL, SMB share)
-    - Admins: khal.drogo (U)
-    - RDP: Dothraki (G)
+  - SRV03 : Salisbury.maryland.local (Windows Server 2016) (MSSQL, SMB share)
+    - Admins: joaquin.Pereida (U)
+    - RDP: Hartford (G)
     - MSSQL :
-      - admin : khal.drogo
+      - admin : joaquin.Pereida
       - impersonate :
-        - execute as login : jorah.mormont -> sa
+        - execute as login : teresa.Perez -> sa
       - link:
-        - to castelblack: jorah.mormont -> sa
+        - to Yonkers: teresa.Perez -> sa
 
 
 ## ROAD MAP
@@ -509,9 +509,9 @@ ESSOS.LOCAL
 
 ### Force replication (no more used)
 
-- On dragonstone play as domain admin user :
+- On EmpireState play as domain admin user :
 ```
-repadmin /replicate kingslanding.sevenkingdoms.local dragonstone.sevenkingdoms.local dc=sevenkingdoms,dc=local /full
+repadmin /replicate NYC.newyork.local EmpireState.newyork.local dc=newyork,dc=local /full
 ```
 
 ### vagrant usefull commands (vm management)
@@ -578,7 +578,7 @@ ansible-playbook main.yml
 
 ```bash
 An exception occurred during task execution. To see the full traceback, use -vvv. The error was:    at Microsoft.ActiveDirectory.Management.Commands.ADCmdletBase`1.BeginProcessing()
-failed: [192.168.56.xx] (item={'key': 'DragonsFriends', 'value': ['sevenkingdoms.local\\tyron.lannister', 'essos.local\\daenerys.targaryen']}) => {"ansible_loop_var": "item", "attempts": 3, "changed": false, "item": {"key": "DragonsFriends", "value": ["north.sevenkingdoms.local\\jon.snow", "sevenkingdoms.local\\tyron.lannister", "essos.local\\daenerys.targaryen"]}, "msg": "Unhandled exception while executing module: Either the target name is incorrect or the server has rejected the client credentials."}
+failed: [192.168.56.xx] (item={'key': 'LocalAdmin', 'value': ['newyork.local\\nicolas.Maduro', 'maryland.local\\carmelo.Anthony']}) => {"ansible_loop_var": "item", "attempts": 3, "changed": false, "item": {"key": "LocalAdmin", "value": ["north.newyork.local\\elena.lopez", "newyork.local\\nicolas.Maduro", "maryland.local\\carmelo.Anthony"]}, "msg": "Unhandled exception while executing module: Either the target name is incorrect or the server has rejected the client credentials."}
 ```
 
 ### Error Add-Warning
@@ -589,7 +589,7 @@ failed: [192.168.56.xx] (item={'key': 'DragonsFriends', 'value': ['sevenkingdoms
 
 ```bash
 An exception occurred during task execution. To see the full traceback, use -vvv. The error was: at , : line 475
-failed: [192.168.56.11] (item={'key': 'arya.stark', 'value': {'firstname': 'Arya', 'surname': 'Stark',
+failed: [192.168.56.11] (item={'key': 'pablo.sandoval', 'value': {'firstname': 'Arya', 'surname': 'North',
 ...
 "msg": "Unhandled exception while executing module: The term 'Add-Warning' is not recognized as the name of a cmdlet, function, script file, or operable program. Check the spelling of the name, or if a path was included, verify that the path is correct and try again."}+
 ```
@@ -638,7 +638,7 @@ ansible-galaxy collection install ansible.windows --force
 ### winrm
 
 ```bash
-PLAY [DC01 - kingslanding] *******************************************************
+PLAY [DC01 - NYC] *******************************************************
 
  
 
@@ -670,9 +670,9 @@ solution : wait or if crashed then re-run Ansible script
 ### Domain controller : ensure Users are present 
 
 ```bash
-TASK [domain_controller : Ensure that Users presents in ou=<kingdom>,dc=SEVENKINGDOMS,dc=local] ***************************************************************************
+TASK [domain_controller : Ensure that Users presents in ou=<kingdom>,dc=newyork,dc=local] ***************************************************************************
 An exception occurred during task execution. To see the full traceback, use -vvv. The error was:    at Microsoft.ActiveDirectory.Management.Commands.ADCmdletBase`1.ProcessRecord()
-failed: [192.168.56.10] (item={u'key': u'lord.varys', u'value': {u'city': u"King's Landing", u'password': u'_W1sper_$', u'name': u'Lord Varys', u'groups': u'Small Council', u'path': u'OU=Users,OU=Crownlands,OU=kingdoms,DC=SEVENKINGDOMS,DC=local'}}) => {"ansible_loop_var": "item", "changed": false, "item": {"key": "lord.varys", "value": {"city": "King's Landing", "groups": "Small Council", "name": "Lord Varys", "password": "_W1sper_$", "path": "OU=Users,OU=Crownlands,OU=kingdoms,DC=SEVENKINGDOMS,DC=local"}}, "msg": "Unhandled exception while executing module: An unspecified error has occurred"}
+failed: [192.168.56.10] (item={u'key': u'jesus.puello', u'value': {u'city': u"New York City", u'password': u'_W1sper_$', u'name': u'Lord Varys', u'groups': u'RadioCity', u'path': u'OU=Users,OU=WestSide,OU=kingdoms,DC=newyork,DC=local'}}) => {"ansible_loop_var": "item", "changed": false, "item": {"key": "jesus.puello", "value": {"city": "New York City", "groups": "RadioCity", "name": "Lord Varys", "password": "_W1sper_$", "path": "OU=Users,OU=WestSide,OU=kingdoms,DC=newyork,DC=local"}}, "msg": "Unhandled exception while executing module: An unspecified error has occurred"}
 
 ```
  solution : re-run Ansible script
