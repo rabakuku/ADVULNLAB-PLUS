@@ -1,0 +1,69 @@
+[all:vars]
+; domain_name : folder inside ad/
+domain_name=newyork.local
+
+; adapter created by vagrant and virtualbox (comment if you use vmware)
+nat_adapter=Ethernet
+domain_adapter=Ethernet 2
+
+; adapter created by vagrant and vmware (uncomment if you use vmware)
+; nat_adapter=Ethernet0
+; domain_adapter=Ethernet1
+
+ansible_user=vagrant
+ansible_password=vagrant
+password=Str0nGPassw0rd123_
+ansible_connection=winrm
+ansible_winrm_server_cert_validation=ignore
+ansible_winrm_operation_timeout_sec=400
+ansible_winrm_read_timeout_sec=500
+enable_http_proxy=no
+ad_http_proxy=http://x.x.x.x:xxxx
+ad_https_proxy=http://x.x.x.x:xxxx
+
+; ------------------------------------------------
+; newyork.local
+[dc01:vars]
+dns_domain=192.168.56.10
+dict_key=dc01
+[dc01]
+192.168.56.10
+
+; ------------------------------------------------
+; north.newyork.local
+[dc02:vars]
+dns_domain=192.168.56.10
+dict_key=dc02
+[dc02]
+192.168.56.11
+
+[srv02:vars]
+dns_domain=192.168.56.11
+dict_key=srv02
+[srv02]
+192.168.56.22
+
+; ------------------------------------------------
+; maryland.local
+[dc03:vars]
+dns_domain=192.168.56.12
+dict_key=dc03
+[dc03]
+192.168.56.12
+
+[srv03:vars]
+dns_domain=192.168.56.12
+dict_key=srv03
+[srv03]
+192.168.56.23
+
+; [elk:vars]
+; ansible_connection=ssh
+; ansible_ssh_user=vagrant
+; ansible_ssh_private_key_file=./.vagrant/machines/elk/virtualbox/private_key
+; ansible_ssh_port=22
+; host_key_checking = false
+; 
+; [elk]
+; 192.168.56.50
+
